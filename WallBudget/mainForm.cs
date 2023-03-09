@@ -193,8 +193,7 @@ namespace WallBudget
                     conn.Close();
                     conn.Open();
                 }
-
-                //fixTitheForBedroomOnIncomeTable();
+               
 
                 //load data into tables
                 loadIncome();
@@ -290,43 +289,7 @@ namespace WallBudget
 
         }
 
-        private void fixTitheForBedroomOnIncomeTable()
-        {
-            try
-            {
-                if (cmbYear.Text == "2022")
-                {
-                    if (cmbMonth.Text == "July" || cmbMonth.Text == "August")
-                    {
-                        //conn.Open();
-                        string sql = "SELECT Gross FROM income WHERE Description = 'Bedroom'";
-                        double result = getDoubleFromTbl(sql);
-                        sql = $"SELECT sum(Amount) FROM utilities";
-                        double bills = getDoubleFromTbl(sql);
-
-                        bills = bills - 108.06 - 1465.44;             // *** temporarily hard coded, will take out later ***
-
-                        bills = bills / 2;
-                        result = result - bills;
-                        result = result * .15;
-                        result = Math.Round(result, 2);
-                        sql = $"UPDATE income SET Tithe = {result} WHERE Description = 'Bedroom'";
-                        MySqlCommand update = new MySqlCommand(@sql, conn);
-                        update.ExecuteNonQuery();
-                        //conn.Close();
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                MessageBox.Show(ex.Message);
-            }
-
-
-        }
-
+        
         private void setTithe()
         {
             try
@@ -1817,7 +1780,7 @@ namespace WallBudget
                 /////
                 ///// once now tables are there
                 ///// delete * from tables monthlyspending and income
-                ///// delete all from income but create bedroom or it will fail to load
+                ///// delete all from income but create br it will fail to load
                 if (conn.State != ConnectionState.Open)
                 {
                     conn.Close();
